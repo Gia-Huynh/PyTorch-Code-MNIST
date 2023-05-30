@@ -1,26 +1,25 @@
 #https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html
 import sp_func
 import numpy as np
-import cv2
-import torch
-import torchvision
-import torchvision.transforms as transforms
-import time
 
-torch.cuda.is_available()
-use_gpu = 1 
-device = torch.device("cuda:1" if (torch.cuda.is_available() and use_gpu) else "cpu")
-
-train_arr, train_label, test_arr, test_label = sp_func.CsvToTrainTest ("./MNIST/train.csv", has_label = 1)
+train_arr, train_label, test_arr, test_label = sp_func.CsvToTrainTest ("./MNIST/train.csv", has_label = 1, batch_size = 24)
 train_arr.astype(np.float32)
 test_arr.astype(np.float32)
 
 test_arr, _ = sp_func.CsvToArr ("./MNIST/test.csv", has_label = 0)
 test_arr.astype(np.float32)
 
+import cv2
+import torch
+import torchvision
+import torchvision.transforms as transforms
+import time
 import torch.nn as nn
 import torch.nn.functional as F
 
+torch.cuda.is_available()
+use_gpu = 1 
+device = torch.device("cuda:1" if (torch.cuda.is_available() and use_gpu) else "cpu")
 
 class Net(nn.Module):
     def __init__(self):
@@ -35,15 +34,28 @@ class Net(nn.Module):
 
     def forward(self, x):
         x = self.pool(F.relu(self.conv1(x)))
+        print(x.size())
         x = self.pool(F.relu(self.conv2(x)))
+        print(x.size())
         x = self.pool(F.relu(self.conv3(x)))
+        print(x.size())
         x = torch.flatten(x, 0) # flatten all dimensions except batch
+        print(x.size())
         x = F.relu(self.fc1(x))
+        print(x.size())
         x = F.relu(self.fc2(x))
+        print(x.size())
         x = self.fc3(x)
         return x
   
 net = Net()
+print (net)
+
+x = torch.randn(1, 1, 28, 28)
+net(x)
+x = torch.randn(12, 1, 28, 28)
+net(x)
+STOP
 net.to(device)
 import torch.optim as optim
 
@@ -63,6 +75,8 @@ for epoch in range(1):  # loop over the dataset multiple times
         labels = train_label[i]
         # zero the parameter gradients
         optimizer.zero_grad()
+
+        print (data.shape)
 
         # forward + backward + optimize
         input_tensor = torch.from_numpy(data).type(torch.FloatTensor).to(device)
