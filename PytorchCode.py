@@ -4,15 +4,15 @@ import numpy as np
 
 epochs = 30
 batch_size = 64
-use_gpu = 0
+use_gpu = -1
 print ("Use gpu: ", use_gpu)
 
 train_arr, train_label, val_arr, val_label = sp_func.CsvToTrainVal ("./MNIST/train.csv", has_label = 1, batch_size = batch_size)
 train_arr.astype(np.float32)
 val_arr.astype(np.float32)
 
-test_arr, _ = sp_func.CsvToArr ("./MNIST/test.csv", has_label = 0)
-test_arr.astype(np.float32)
+#test_arr, _ = sp_func.CsvToArr ("./MNIST/test.csv", has_label = 0)
+#test_arr.astype(np.float32)
 
 import torch
 #import torchvision
@@ -138,7 +138,7 @@ def create_testset_Output(net, test_arr, device):
     
     sp_func.WriteSubmission ('result.csv', gay[:,::-1])
     
-create_testset_Output (net, test_arr, device)
+#create_testset_Output (net, test_arr, device)
 
 #Sanity check
 def sanity_check (val_label, val_arr, idx, net):

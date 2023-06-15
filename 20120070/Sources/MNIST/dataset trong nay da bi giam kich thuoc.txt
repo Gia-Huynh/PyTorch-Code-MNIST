@@ -1,0 +1,2 @@
+Vì file gốc quá nặng (trên 50mb theo e nhớ) nên e đã cắt giảm cả 2 file train và test, train từ 42 nghìn dòng
+xuống còn 2 nghìn dòng, chỉ đủ để chạy thử)

@@ -4,7 +4,7 @@ import numpy as np
 
 epochs = 30
 batch_size = 4
-use_gpu = 0
+use_gpu = -1
 print ("Use gpu: ", use_gpu)
 
 train_arr, train_label, val_arr, val_label = sp_func.CsvToTrainVal ("./MNIST/train.csv", has_label = 1, batch_size = batch_size)
@@ -55,11 +55,13 @@ net = torch.load('test_model')
 #print (net)
 net.to(device)
 net.eval()
-
 if (torch.cuda.is_available() and (use_gpu!=-1)):
     print ("Using gpu: ", torch.cuda.get_device_name(use_gpu))
 else:
     print ("Using cpu")
+
+#from torchsummary import summary
+#summary(net.cuda(), (1,28,28))
 
 def create_testset_Output(net, test_arr, device):
     output_testset = net(torch.from_numpy(test_arr).type(torch.FloatTensor).to(device))
@@ -70,7 +72,7 @@ def create_testset_Output(net, test_arr, device):
     
     sp_func.WriteSubmission ('result.csv', gay[:,::-1])
     
-create_testset_Output (net, test_arr, device)
+#create_testset_Output (net, test_arr, device)
 
 #Sanity check
 def sanity_check (val_label, val_arr, idx, net):
